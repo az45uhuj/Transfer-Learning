@@ -1,16 +1,17 @@
+# reference https://medium.com/the-owl/extracting-features-from-an-intermediate-layer-of-a-pretrained-model-in-pytorch-c00589bda32b
 from torchvision.models import resnet50, ResNet50_Weights
 from torchvision.io import read_image
 from torch import nn
 from torchsummary import summary
 
-def show_layers(model):
+def show_layers(model0):
     Children_Counter = 0
-    for i, j in model.named_children():
+    for i, j in model0.named_children():
         print("Children Counter:", Children_Counter, "Layer Name: ", i)
         Children_Counter += 1
 
-def show_modules(model):
-    print(model._modules)
+def show_modules(model0):
+    print(model0._modules)
 
 class new_model(nn.Module):
     def __init__(self, output_layer = None, weights=None, model=None):
@@ -45,8 +46,8 @@ preprocess = weights.transforms()
 # step 3: Apply inference preprocessing transforms
 batch = preprocess(img).unsqueeze(0)
 # step 4: Use the model and print the predicted category
-extrcted_feature = mymodel(batch)
-print(extrcted_feature)
+extracted_feature = mymodel(batch)
+print(extracted_feature)
 
 
 #prediction = model(batch).squeeze(0).softmax(0)
