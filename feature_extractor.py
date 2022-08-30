@@ -20,16 +20,14 @@ class new_model(nn.Module):
         self.pretrained = model
         self.output_layer = output_layer
         self.layers = list(self.pretrained._modules.keys())
-        self.layer_count = 0
-        for l in self.layers:
-            if l != self.output_layer:
-                self.layer_count += 1
-            else:
+        self.children_list = []
+        for n, c in self.pretrained.named_children():
+            self.children_list.append(c)
+            if n == self.output_layer:
                 break
-        for i in range(1, len(self.layers)-self.layer_count):
-            self.dummy_var = self.pretrained._modules.pop(self.layers[-i])
 
-        self.net = nn.Sequential(self.pretrained._modules)
+        self.net = nn.Sequential(*self.children_list)
+        self.pretrained = None
 
     def forward(self, x):
         x = self.net(x)
